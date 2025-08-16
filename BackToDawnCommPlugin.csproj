@@ -59,11 +59,11 @@
     </Reference>
   </ItemGroup>
   <!-- 编译后自动拷到游戏的 plugins 目录 -->
-  <Target Name="CopyToGame" AfterTargets="Build">
+  <!-- <Target Name="CopyToGame" AfterTargets="Build">
     <PropertyGroup>
       <OutDir>$(GameDir)\BepInEx\plugins\BackToDawnCommPlugin</OutDir>
     </PropertyGroup>
     <MakeDir Directories="$(OutDir)" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OutDir)" />
-  </Target>
+  </Target> -->
 </Project>
