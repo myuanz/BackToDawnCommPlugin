@@ -1,0 +1,54 @@
+[Info   :BackToDawnCommPlugin] Found 185 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: 皮克曼 at 32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text
+[Info   :BackToDawnCommPlugin] Found Unity Text: Yacaqu! Shub'th!!! at 32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text
+[Info   :BackToDawnCommPlugin]   [1/2] TalkWord_black(Clone) - 皮克曼
+[Info   :BackToDawnCommPlugin]     Path: 32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [2/2] TalkWord_black(Clone) - Yacaqu! Shub'th!!!
+[Info   :BackToDawnCommPlugin]     Path: 32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 2 dialogue entries
+[Info   :BackToDawnCommPlugin] [Dialogue 1/2] Character="32_鬣蜥_皮克曼" BubbleType="TalkWord_black(Clone)" Typing=No Path=32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text Text="皮克曼"
+[Info   :BackToDawnCommPlugin] [Dialogue 2/2] Character="32_鬣蜥_皮克曼" BubbleType="TalkWord_black(Clone)" Typing=No Path=32_鬣蜥_皮克曼/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text Text="Yacaqu! Shub'th!!!"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Loading Dynamic Scanner ===
+[Info   :BackToDawnCommPlugin] Scanner assembly loaded successfully
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 186 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: 威尔伯 at 23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text
+[Info   :BackToDawnCommPlugin] Found Unity Text: Azchao'th, Bula Moce. at 23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text
+[Info   :BackToDawnCommPlugin]   [1/2] TalkWord_black(Clone) - 威尔伯
+[Info   :BackToDawnCommPlugin]     Path: 23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [2/2] TalkWord_black(Clone) - Azchao'th, Bula Moce.
+[Info   :BackToDawnCommPlugin]     Path: 23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 2 dialogue entries
+[Info   :BackToDawnCommPlugin] [Dialogue 1/2] Character="23_山羊_威尔伯" BubbleType="TalkWord_black(Clone)" Typing=No Path=23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/name/Text Text="威尔伯"
+[Info   :BackToDawnCommPlugin] [Dialogue 2/2] Character="23_山羊_威尔伯" BubbleType="TalkWord_black(Clone)" Typing=No Path=23_山羊_威尔伯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text Text="Azchao'th, Bula Moce."
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Loading Dynamic Scanner ===
+[Info   :BackToDawnCommPlugin] Scanner assembly loaded successfully
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 186 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: *离开。* at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 送礼物。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 交易。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]   [1/3] Unknown - *离开。*
+[Info   :BackToDawnCommPlugin]     Path: 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [2/3] Unknown - 送礼物。
+[Info   :BackToDawnCommPlugin]     Path: 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [3/3] Unknown - 交易。
+[Info   :BackToDawnCommPlugin]     Path: 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 3 dialogue entries
+[Info   :BackToDawnCommPlugin] [Dialogue 1/3] Character="Root Interaction Character Canvas" BubbleType="Unknown" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="*离开。*"
+[Info   :BackToDawnCommPlugin] [Dialogue 2/3] Character="Root Interaction Character Canvas" BubbleType="Unknown" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="送礼物。"
+[Info   :BackToDawnCommPlugin] [Dialogue 3/3] Character="Root Interaction Character Canvas" BubbleType="Unknown" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="交易。"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
