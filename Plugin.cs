@@ -5,6 +5,11 @@ using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using UnityEngine;
+using HarmonyLib;
+using UnityEngine.EventSystems;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using MonoMod.RuntimeDetour;
 
 namespace BackToDawnCommPlugin
 {
@@ -12,6 +17,15 @@ namespace BackToDawnCommPlugin
     [BepInProcess("Back To The Dawn.exe")]
     public class Plugin : BasePlugin
     {
+        private NativeDetour d_GetKeyDownInt, d_GetMouseButtonDown, d_get_anyKeyDown;
+        private GetKeyDownInt_Delegate o_GetKeyDownInt;
+        private GetMouseButtonDown_Delegate o_GetMouseButtonDown;
+        private AnyKeyDown_Delegate o_get_anyKeyDown;
+
+        private delegate bool GetKeyDownInt_Delegate(KeyCode key);
+        private delegate bool GetMouseButtonDown_Delegate(int btn);
+        private delegate bool AnyKeyDown_Delegate();
+
         internal static new ManualLogSource Log;
 
         public override void Load()
@@ -20,10 +34,9 @@ namespace BackToDawnCommPlugin
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
             // 添加动态加载器组件
             AddComponent<DynamicLoader>();
+
         }
     }
-
-
 
     /// <summary>动态加载器：监听F8键，动态加载并执行外部程序集</summary>
     public class DynamicLoader : MonoBehaviour
@@ -38,13 +51,13 @@ namespace BackToDawnCommPlugin
             // 设置控制台编码为UTF-8（全局设置）
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Plugin.Log.LogInfo("Console encoding set to UTF-8");
-            
+
             // 动态程序集路径（从本地构建目录加载，避免文件占用）
             // 假设开发目录结构：游戏安装在 C:\Program Files (x86)\Steam\steamapps\common\MetalHeadGames
             // 开发目录在 C:\Users\{用户}\projects\BackToDawnCommPlugin
             var userName = Environment.UserName;
             var devPath = $@"C:\Users\{userName}\projects\BackToDawnCommPlugin\bin\Debug\net6.0\BackToDawnCommPlugin.Scanner.dll";
-            
+
             // 如果开发路径存在就用开发路径，否则回退到插件目录（用于发布版本）
             if (File.Exists(devPath))
             {
@@ -82,7 +95,7 @@ namespace BackToDawnCommPlugin
                 // 每次都重新加载程序集以获取最新版本
                 var assemblyBytes = File.ReadAllBytes(_dllPath);
                 _currentAssembly = Assembly.Load(assemblyBytes);
-                
+
                 Plugin.Log.LogInfo("Scanner assembly loaded successfully");
 
                 // 查找入口类和方法
@@ -102,7 +115,7 @@ namespace BackToDawnCommPlugin
 
                 // 执行扫描器
                 Plugin.Log.LogInfo("Executing scanner...");
-                executeMethod.Invoke(null, new object[] { Plugin.Log });
+                executeMethod.Invoke(null, [Plugin.Log]);
             }
             catch (Exception ex)
             {
