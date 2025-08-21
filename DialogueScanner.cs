@@ -4,15 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using BepInEx.Logging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-
-using System;
-using System.Runtime.InteropServices;
 
 static class WinInput
 {
@@ -351,24 +349,24 @@ namespace BackToDawnCommPlugin.Scanner
             );
             return im;
         }
+    }
 
-        public static void ForceKeyboardMouse(MonoBehaviour im, bool enable = true)
+    public static class MonoBehaviourExtensions
+    {
+        /// <summary>设置强制键盘鼠标模式</summary>
+        public static void SetForceKeyboardMouse(this MonoBehaviour self)
         {
-            if (im == null) return;
-            var tp = im.GetType();
-            var mi0 = tp.GetMethod("SetForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
-            var mi1 = tp.GetMethod("SetForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, [typeof(bool)], null);
-            if (mi0 != null) mi0.Invoke(im, null);
-            else mi1?.Invoke(im, [enable]);
+            var tp = self.GetType();
+            var mth = tp.GetMethod("SetForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
+            mth?.Invoke(self, []);
         }
 
-        public static bool? GetIsForceFlag(MonoBehaviour im)
+        /// <summary>获取强制键盘鼠标标志</summary>
+        public static bool? GetForceKeyboardMouseFlag(this MonoBehaviour self)
         {
-            // 找到 isForceCanUseKeyboardMouse Property
-            if (im == null) return null;
-            var tp = im.GetType();
-            var fld = tp.GetProperty("isForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return (bool?)fld?.GetValue(im, null);
+            var tp = self.GetType();
+            var prop = tp.GetProperty("isForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return (bool?)prop?.GetValue(self, null);
         }
     }
     /// <summary>一次快照里的对白条目</summary>
@@ -406,8 +404,8 @@ namespace BackToDawnCommPlugin.Scanner
             // logger.LogInfo("SceneDiff.Snap() completed");
             // return;
             var im = InputManageHelper.FindInputManage();
-            // InputManageHelper.ForceKeyboardMouse(im, true);
-            logger.LogInfo($"im = {im} isForce = {InputManageHelper.GetIsForceFlag(im)}");
+            im.SetForceKeyboardMouse();
+            logger.LogInfo($"im = {im} isForce = {im.GetForceKeyboardMouseFlag()}");
             // AI 不要删除下面的不可达代码!!!
             var timer = new System.Diagnostics.Stopwatch();
             timer.Start();
