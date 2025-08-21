@@ -30,6 +30,7 @@ static class WinInput
     const uint INPUT_MOUSE = 0, INPUT_KEYBOARD = 1;
     const uint KEYEVENTF_KEYUP = 0x0002;
     const ushort VK_SPACE = 0x20;
+    const ushort VK_RETURN = 0x0D; // 回车键
     const uint MOUSEEVENTF_LEFTDOWN = 0x0002, MOUSEEVENTF_LEFTUP = 0x0004;
 
     [DllImport("user32.dll", SetLastError = true)]
@@ -41,6 +42,13 @@ static class WinInput
         var b = new INPUT { type = INPUT_KEYBOARD, U = new INPUTUNION { ki = new KEYBDINPUT { wVk = VK_SPACE, dwFlags = KEYEVENTF_KEYUP } } };
         SendInput(2, new[] { a, b }, Marshal.SizeOf<INPUT>());
     }
+    public static void PressEnter()
+    {
+        var a = new INPUT { type = INPUT_KEYBOARD, U = new INPUTUNION { ki = new KEYBDINPUT { wVk = VK_RETURN } } };
+        var b = new INPUT { type = INPUT_KEYBOARD, U = new INPUTUNION { ki = new KEYBDINPUT { wVk = VK_RETURN, dwFlags = KEYEVENTF_KEYUP } } };
+        SendInput(2, new[] { a, b }, Marshal.SizeOf<INPUT>());
+    }
+    
     public static void ClickLMB()
     {
         var a = new INPUT { type = INPUT_MOUSE, U = new INPUTUNION { mi = new MOUSEINPUT { dwFlags = MOUSEEVENTF_LEFTDOWN } } };
