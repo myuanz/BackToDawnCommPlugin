@@ -390,9 +390,6 @@ namespace BackToDawnCommPlugin.Scanner
             "Charcter Canvas", // 开发组手误
         };
 
-        // Talk 气泡的根名关键字（前缀匹配更鲁棒）
-        private static readonly string[] TalkRootHints = { "TalkWord" };
-
         /// <summary>动态加载器调用的入口方法</summary>
         public static void Execute(ManualLogSource logger)
         {
