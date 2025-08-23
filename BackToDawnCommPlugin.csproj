@@ -18,9 +18,10 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.*" PrivateAssets="all" />
   </ItemGroup>
+
+
   <PropertyGroup>
     <GameDir Condition="'$(GameDir)'=='' and '$(BTTD_DIR)'!=''">$(BTTD_DIR)</GameDir>
     <GameDir Condition="'$(GameDir)'==''">C:\Program Files (x86)\Steam\steamapps\common\MetalHeadGames</GameDir>
