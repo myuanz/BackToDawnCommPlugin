@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Reflection;
+using Il2CppSystem.Reflection;
 using UnityEngine;
 
 namespace BackToDawnCommPlugin
@@ -28,17 +28,20 @@ namespace BackToDawnCommPlugin
         /// <summary>设置强制键盘鼠标模式</summary>
         public static void SetForceKeyboardMouse(this MonoBehaviour self)
         {
-            var tp = self.GetType();
-            var mth = tp.GetMethod("SetForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
-            mth?.Invoke(self, []);
+            var tp = self.GetIl2CppType();
+            var mth = tp.GetMethod("SetForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Array.Empty<Il2CppSystem.Type>(), null);
+            if (mth != null) {
+                mth.Invoke(self, new Il2CppSystem.Object[] {  });
+            } else {
+                Plugin.Log.LogError($"SetForceKeyboardMouse: {tp.Name} not found");
+            }
         }
 
         /// <summary>获取强制键盘鼠标标志</summary>
         public static bool? GetForceKeyboardMouseFlag(this MonoBehaviour self)
         {
-            var tp = self.GetType();
-            var prop = tp.GetProperty("isForceCanUseKeyboardMouse", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return (bool?)prop?.GetValue(self, null);
+            var prop = DialogueScanner.GetMember(self, "isForceCanUseKeyboardMouse");
+            return prop?.Unbox<bool>();
         }
     }
 }
