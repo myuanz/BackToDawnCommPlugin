@@ -52,3 +52,107 @@
 [Info   :BackToDawnCommPlugin] [Dialogue 2/3] Character="Root Interaction Character Canvas" BubbleType="Unknown" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="送礼物。"
 [Info   :BackToDawnCommPlugin] [Dialogue 3/3] Character="Root Interaction Character Canvas" BubbleType="Unknown" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="交易。"
 [Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+
+
+
+鼠标悬浮对话框
+
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Executing Scanner ===
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] im = UnityEngine.MonoBehaviour isForce =
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 178 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: 交谈 at 11_驴子_山姆/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/TalkTips(Clone)/Tips/Text
+[Info   :BackToDawnCommPlugin]   [1/1] 11_驴子_山姆 - 交谈
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 1 dialogue entries in 7ms
+[Info   :BackToDawnCommPlugin] [Dialogue 1/1] Character="11_驴子_山姆" Typing=No Path=11_驴子_山姆/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/TalkTips(Clone)/Tips/Text Text="交谈"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+
+
+普通对话
+
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Executing Scanner ===
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] im = UnityEngine.MonoBehaviour isForce =
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 180 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: 嗨~你好，我是托马斯，你的新室友。 at 1_狐狸_托马斯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text
+[Info   :BackToDawnCommPlugin]   [1/1] 1_狐狸_托马斯 - 嗨~你好，我是托马斯，你的新室友。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 1 dialogue entries in 18ms
+[Info   :BackToDawnCommPlugin] [Dialogue 1/1] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text Text="嗨~你好，我是托马斯，你的新室友。"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+
+对话中选项
+
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Executing Scanner ===
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] im = UnityEngine.MonoBehaviour isForce =
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 180 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: 我在电视台工作。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 我是个记者。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]   [1/2] 1_狐狸_托马斯 - 我在电视台工作。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [2/2] 1_狐狸_托马斯 - 我是个记者。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 2 dialogue entries in 7ms
+[Info   :BackToDawnCommPlugin] [Dialogue 1/2] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="我在电视台工作。"
+[Info   :BackToDawnCommPlugin] [Dialogue 2/2] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="我是个记者。"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+
+主动触发选项
+
+[Info   :BackToDawnCommPlugin] === F8 Key Pressed - Executing Scanner ===
+[Info   :BackToDawnCommPlugin] Executing scanner...
+[Info   :BackToDawnCommPlugin] Starting dialogue scan...
+[Info   :BackToDawnCommPlugin] im = UnityEngine.MonoBehaviour isForce =
+[Info   :BackToDawnCommPlugin] Searching for Character Canvas objects...
+[Info   :BackToDawnCommPlugin] Found 180 Character Canvas objects
+[Info   :BackToDawnCommPlugin] Found Unity Text: *离开。* at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 送礼物。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 聊天。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 交易。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin] Found Unity Text: 询问联络外面的方法。 at 1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText
+[Info   :BackToDawnCommPlugin]   [1/5] 1_狐狸_托马斯 - *离开。*
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [2/5] 1_狐狸_托马斯 - 送礼物。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [3/5] 1_狐狸_托马斯 - 聊天。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [4/5] 1_狐狸_托马斯 - 交易。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin]   [5/5] 1_狐狸_托马斯 - 询问联络外面的方法。
+[Info   :BackToDawnCommPlugin]     Path: System.Collections.Generic.List`1[System.String]
+[Info   :BackToDawnCommPlugin]     Typing: No
+[Info   :BackToDawnCommPlugin] Scan completed, found 5 dialogue entries in 10ms
+[Info   :BackToDawnCommPlugin] [Dialogue 1/5] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="*离开。*"
+[Info   :BackToDawnCommPlugin] [Dialogue 2/5] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="送礼物。"
+[Info   :BackToDawnCommPlugin] [Dialogue 3/5] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="聊天。"
+[Info   :BackToDawnCommPlugin] [Dialogue 4/5] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="交易。"
+[Info   :BackToDawnCommPlugin] [Dialogue 5/5] Character="1_狐狸_托马斯" Typing=No Path=1_狐狸_托马斯/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)/contentRoot/TalkAction_black(Clone)/root/titleRoot/titileText Text="询问联络外面的方法。"
+[Info   :BackToDawnCommPlugin] === Snapshot execution completed ===
+
+# 问号
+
+路径: 11_驴子_山姆/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/questAnimation
+组件名称: Widget_Animator 
+内容: Widget_Animator.showName = "question"
+
+# 表情符
+
+路径: 11_驴子_山姆/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/emojiRootPos/emojiRoot/emoji
+组件名称: UIImageAnimator
+内容: UIImageAnimator.currentAnimation.animationName = "smile"
