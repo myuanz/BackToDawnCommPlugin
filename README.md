@@ -13,32 +13,37 @@
 
 ## 安装
 
-本插件基于 BepInEx 6.0 开发, 要正确安装插件需要两步:
+本插件基于 BepInEx 6.0 开发, 要正确安装插件需要:
 
-1. 安装 BepInEx 6.0
-2. 安装本插件 dll
+1. 下载 BepInEx+本插件
+2. 安装 BepInEx 6.0
+3. 安装本插件 dll
 
 ### 下载
 
-1. 如果你能访问 xget (通常可以), 可以点击 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/FastDialog-1.0.1.zip 和 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.738+af0cba7.zip 
-2. 如果你的 Github 足够快, 可以从 https://github.com/myuanz/BackToDawnCommPlugin/releases 下载
-3. 如果你有百度盘会员, 可以从 https://pan.baidu.com/s/1RykwajmrnOtyts2o0N2jYw?pwd=pyht 下载
+任选一种方法
+
+1. 如果你从群文件里下载了一整个压缩包, 那么已经足够
+2. 如果你能访问 xget (通常可以), 可以点击 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/FastDialog-1.0.1.zip 和 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.738+af0cba7.zip 
+3. 如果你的 Github 足够快, 可以从 https://github.com/myuanz/BackToDawnCommPlugin/releases 下载
+4. 如果你有百度盘会员, 可以从 https://pan.baidu.com/s/1RykwajmrnOtyts2o0N2jYw?pwd=pyht 下载
+
 
 下载完成后你应该得到这两个文件 ![alt text](static/all-files.png)
 
 ### 首次安装
 
 1. 在 Steam 库中找到动物迷城, 右键->管理->浏览本地文件
-2. 将 BepInEx 解压到游戏根目录, 解压后应当大致如下 ![alt text](static/1.decompress.png)
+2. 将 BepInEx 根目录里的东西与游戏根目录里混合, 解压后应当大致如下 ![alt text](static/1.decompress.png) 注意是混合, 混合后结构应与图片相同, 文件和目录一一对应
 3. 正常启动一次游戏, BepInEx会解码游戏, 此时应该有一个命令行黑框出现, 稍等片刻游戏正常启动后就可关掉
-2. 进入`BepInEx\plugins`下, 将 `FastDialog.zip` 里的 dll 解压到这里, ![alt text](static/2.install-fastdialog.png) 你的游戏可能在别处安装, 但路径的最后三级应该都是`BepInEx\plugins\FastDialog`
-5. 启动游戏
+4. 进入游戏根目录的`BepInEx\plugins`下, 将 `FastDialog.zip` 里的 dll 解压到这里, 结构如下: ![alt text](static/2.install-fastdialog.png) 你的游戏可能在别处安装, 但路径的最后三级应该都是`BepInEx\plugins\FastDialog`
+5. 启动游戏, 按F9开始使用
    
 ### 更新插件
 
 1. 在 Steam 库中找到动物迷城, 右键->管理->浏览本地文件
 2. 进入`BepInEx\plugins`下, 将 `FastDialog.zip` 里的 dll 解压到这里, ![alt text](static/2.install-fastdialog.png) 你的游戏可能在别处安装, 但路径的最后三级应该都是`BepInEx\plugins\FastDialog`
-3. 启动游戏
+3. 启动游戏, 按F9开始使用
 
 ## TODO
 
@@ -48,6 +53,8 @@
 ## 从源代码开发
 
 ```powershell
+git clone https://github.com/myuanz/BackToDawnCommPlugin
+cd BackToDawnCommPlugin
 $env:BTTD_DIR = "你的游戏安装目录"
 dotnet build
 python build_and_copy.py # 用于结束游戏、构建dll、复制dll、启动游戏
