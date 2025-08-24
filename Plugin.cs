@@ -53,9 +53,6 @@ namespace BackToDawnCommPlugin
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Plugin.Log.LogInfo("Console encoding set to UTF-8");
 
-            var inputManage = InputManageHelper.FindInputManage();
-            inputManage.SetForceKeyboardMouse();
-            Plugin.Log.LogInfo("InputManage set to force keyboard mouse");
         }
 
         void Update()
@@ -63,8 +60,11 @@ namespace BackToDawnCommPlugin
             // 检测F8键按下 - 一次性扫描
             if (Input.GetKeyDown(KeyCode.F8))
             {
-                Plugin.Log.LogInfo("=== F8 Key Pressed - Executing Scanner ===");
-                ExecuteScanner();
+                Plugin.Log.LogInfo("=== F8 Key Pressed - Executing Force Keyboard Mouse ===");
+
+                var inputManage = InputManageHelper.FindInputManage();
+                inputManage.SetForceKeyboardMouse();
+                Plugin.Log.LogInfo($"InputManage set to force keyboard mouse, res: {inputManage.GetForceKeyboardMouseFlag()}");
             }
             
             // 检测F9键按下 - 开始轮询
