@@ -13,6 +13,10 @@
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
     <RootNamespace>BackToDawnCommPlugin</RootNamespace>
+
+    <BepInExPluginGuid>fun.myuan.fastdialog</BepInExPluginGuid>
+    <BepInExPluginName>FastDialog</BepInExPluginName>
+    <BepInExPluginVersion>1.0.0</BepInExPluginVersion>
   </PropertyGroup>
 
   <ItemGroup>
