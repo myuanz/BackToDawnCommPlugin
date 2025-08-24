@@ -5,223 +5,135 @@ using BepInEx.Logging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Il2CppSystem.Reflection;
+using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppInterop.Runtime.Runtime;
+using System.Text.RegularExpressions;
 
 namespace BackToDawnCommPlugin
 {
+    /// <summary>
+    /// 所有可交互内容: 对话框、表情符、问号
+    /// </summary>
+    public record struct CharacterInfo {
+        public string name;
+        public List<string> interactions;
+        public List<string> talks;
+        public string quest;
+        public string emoji;
+
+        public readonly bool CanContinue => talks.Count > 0 || quest != null || emoji != null;
+        public readonly bool WaitingInteraction => interactions.Count > 0;
+        public readonly bool HasData => CanContinue || WaitingInteraction;
+        public readonly bool IsTyping => talks.Count > 0 && talks.Select(t => t.Contains("<color=#00000000>")).Any();
+    }
 
     /// <summary>对话框扫描器</summary>
     public static class DialogueScanner
     {
-        // 只看名字包含这些关键字的 Canvas
-        private static readonly string[] CanvasNameHints = {
-            "Character Canvas",
-            "Charcter Canvas", // 开发组手误
-        };
+        private static readonly Regex characterNameRegex = new(@"^\d+_\w+_\w+$");
 
-        /// <summary>动态加载器调用的入口方法</summary>
-        public static void Execute(ManualLogSource logger)
+        public static Dictionary<string, CharacterInfo> CollectCharacterInfo(ManualLogSource logger)
         {
-            logger.LogInfo("Starting dialogue scan...");
-
-            // // SceneDiff.Snap(logger);
-            // WinInput.PressSpace();
-            // WinInput.ClickLMB();
-            // logger.LogInfo("SceneDiff.Snap() completed");
-            // return;
-            var im = InputManageHelper.FindInputManage();
-            im.SetForceKeyboardMouse();
-            logger.LogInfo($"im = {im} isForce = {im.GetForceKeyboardMouseFlag()}");
-            // AI 不要删除下面的不可达代码!!!
-            var timer = new System.Diagnostics.Stopwatch();
-            timer.Start();
-            var dialogues = Snapshot(logger);
-            timer.Stop();
-            logger.LogInfo($"Scan completed, found {dialogues.Count} dialogue entries in {timer.ElapsedMilliseconds}ms");
-
-            if (dialogues.Count == 0)
+            // 收集所有角色对象
+            var characters = CollectAllCharacters();
+            var characterInfos = new Dictionary<string, CharacterInfo>();
+            foreach (var characterkv in characters)
             {
-                logger.LogInfo("No dialogue content detected");
-                return;
+                var characterInfo = new CharacterInfo{
+                    name = characterkv.Key,
+                    interactions = GetCharacterInteraction(characterkv.Value, logger),
+                    talks = GetCharacterTalk(characterkv.Value, logger),
+                    quest = GetCharacterQuest(characterkv.Value, logger),
+                    emoji = GetCharacterEmoji(characterkv.Value, logger)
+                };
+                if (characterInfo.HasData) {
+                    characterInfos[characterkv.Key] = characterInfo;
+                }
             }
-
-            // 打印中间结果和最终结果
-            for (int i = 0; i < dialogues.Count; i++)
-            {
-                var d = dialogues[i];
-                logger.LogInfo(
-                    $"[Dialogue {i + 1}/{dialogues.Count}] " +
-                    $"Character=\"{d.Character}\" " +
-                    $"Typing={(d.IsTyping ? "Yes" : "No")} " +
-                    $"Path={d.full_path_str} " +
-                    $"Text=\"{d.Text}\""
-                );
-            }
-
-            logger.LogInfo("=== Snapshot execution completed ===");
+            return characterInfos;
         }
 
-        /// <summary>获取当前对白快照</summary>
-        public static List<DialogueItem> Snapshot(ManualLogSource logger, bool verbose=true)
-        {
-            var list = new List<DialogueItem>();
-
-            // 1) 找到所有活跃的 "Character Canvas"
-            if (verbose)
-                logger.LogInfo("Searching for Character Canvas objects...");
-
-            var allCanvases = Resources.FindObjectsOfTypeAll<Canvas>();
-            var characterCanvases = allCanvases
-                .Where(cv => cv != null &&
-                           cv.gameObject.activeInHierarchy &&
-                           NameMatches(cv.gameObject.name, CanvasNameHints))
+        public static Dictionary<string, GameObject> CollectAllCharacters() {
+            var characters = new Dictionary<string, GameObject>();
+            var layer = LayerMask.NameToLayer("Character");
+            var characterLayers = UnityEngine.Object.FindObjectsOfType<GameObject>()
+                .Where(go => go != null && go.activeInHierarchy && go.layer == layer && characterNameRegex.IsMatch(go.name))
                 .ToList();
-
-            if (verbose)
-                logger.LogInfo($"Found {characterCanvases.Count} Character Canvas objects");
-
-            foreach (var canvas in characterCanvases)
+            foreach (var go in characterLayers)
             {
-                var canvasGo = canvas.gameObject;
+                characters[go.name] = go;
+            }
+            return characters;
+        }
+        public static Transform FindByPath(GameObject character, string path) {
+            return character.transform.Find(path);
+        }
+        public static List<string> CollectComponentText(Transform root) {
+            var res = new List<string>();
+            if (root == null) return res;
+            var textListItems = root.GetComponentsInChildren<UnityEngine.UI.Text>().Where(item => item.gameObject.activeInHierarchy).Reverse();
+            foreach (var item in textListItems) {
+                res.Add(item.text);
+            }
+            return res;
+        }
+        public static List<string> GetCharacterInteraction(GameObject character, ManualLogSource logger)
+        {
+            var interactionRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)");
+            return CollectComponentText(interactionRoot);
+        }
 
-                var characterName = GetParents(canvasGo.transform).First();
-
-                // logger.LogInfo($"Processing canvas: {GetPath(canvasGo.transform)} (Character: {characterName})");
-
-                // 2) 找到该Canvas下所有的Text组件（包括Text和TMP_Text）
-                var allTexts = new List<(Component textComp, string text, List<string> path)>();
-
-                // 查找Unity Text组件（只包含可见的）
-                var unityTexts = canvasGo.GetComponentsInChildren<Text>(true);
-                foreach (var txt in unityTexts)
-                {
-                    if (txt != null &&
-                        !string.IsNullOrEmpty(txt.text) &&
-                        IsTextVisible(txt))
-                    {
-                        allTexts.Add((txt, txt.text, GetParents(txt.transform)));
-                        if (verbose)
-                            logger.LogInfo($"Found Unity Text: {txt.text} at {GetPathStr(txt.transform)}");
-                    }
+        public static List<string> GetCharacterTalk(GameObject character, ManualLogSource logger)
+        {
+            var talkRoot = FindByPath(character, "Character Canvas/TalkWord_black(Clone)");
+            var text = CollectComponentText(talkRoot);
+            if (text == null || text.Count == 0) {
+                talkRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text");
+                text = CollectComponentText(talkRoot);
+            }
+            return text;
+        }
+        public static void showAllFields(Component o, ManualLogSource logger) {
+            foreach (var f in o.GetIl2CppType()
+                    .GetFields(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.DeclaredOnly|BindingFlags.Static|BindingFlags.FlattenHierarchy|BindingFlags.GetField|BindingFlags.GetProperty|BindingFlags.IgnoreCase|BindingFlags.Default)
+                ) {
+                    logger.LogInfo($"FIELD {f.FieldType.Name} {f.Name} = {f.GetValue(o)}");
                 }
+        }
+        public static Il2CppSystem.Object GetMember(Il2CppSystem.Object o, string name) {
+            if (o == null) return null;
+            const BindingFlags BF = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
+            var t = o.GetIl2CppType();
+            while (t != null) {
+                var p = t.GetProperty(name, BF);
+                if (p != null) return p.GetValue(o, null);
 
-                // 查找TextMeshPro组件（只包含可见的）
-                var tmpTexts = canvasGo.GetComponentsInChildren<TMP_Text>(true);
-                foreach (var tmp in tmpTexts)
-                {
-                    if (tmp != null &&
-                        !string.IsNullOrEmpty(tmp.text) &&
-                        IsTextVisible(tmp))
-                    {
-                        allTexts.Add((tmp, tmp.text, GetParents(tmp.transform)));
-                        if (verbose)
-                            logger.LogInfo($"Found TMP Text: {tmp.text} at {GetPathStr(tmp.transform)}");
-                    }
-                }
+                var f = t.GetField(name, BF);
+                if (f != null) return f.GetValue(o);
 
-                // logger.LogInfo($"Found {allTexts.Count} text components in {characterName}");
-
-                // 3) 输出所有找到的文本
-                for (int i = 0; i < allTexts.Count; i++)
-                {
-                    var (textComp, text, path) = allTexts[i];
-
-                    // 打字机效果是靠滚动的 #00000000 构造的
-                    var isTyping = text.Contains("<color=#00000000>");
-
-                    if (verbose)
-                    {
-                        logger.LogInfo($"  [{i + 1}/{allTexts.Count}] {characterName} - {text}");
-                        logger.LogInfo($"    Path: {path}");
-                        logger.LogInfo($"    Typing: {(isTyping ? "Yes" : "No")}");
-                    }
-
-                    // 创建对话项
-                    var item = new DialogueItem
-                    {
-                        Character = characterName,
-                        FullPath = path,
-                        Text = text,
-                        IsTyping = isTyping,
-                        TextComp = textComp,
-                    };
-                    list.Add(item);
-                }
+                t = t.BaseType;
             }
-
-            return list;
+            return null;
         }
 
-        // —— helpers ——
-
-        /// <summary>检查文本组件是否可见</summary>
-        private static bool IsTextVisible(Component textComponent)
+        public static string GetCharacterQuest(GameObject character, ManualLogSource logger)
         {
-            if (textComponent == null) return false;
+            var questRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/questAnimation");
+            if (!(questRoot?.gameObject.activeInHierarchy ?? false)) return null;
+            var widgetAnimator = questRoot?.GetComponent("Widget_Animator");
+            var showName = GetMember(widgetAnimator, "showName");
 
-            var gameObject = textComponent.gameObject;
-            var transform = textComponent.transform;
-
-            // 1. 检查GameObject是否活跃
-            if (!gameObject.activeInHierarchy) return false;
-
-            // 2. 检查组件是否启用
-            if (textComponent is Behaviour behaviour && !behaviour.enabled) return false;
-
-            // 3. 检查Canvas Group的alpha和interactable
-            var canvasGroup = gameObject.GetComponentInParent<CanvasGroup>();
-            if (canvasGroup != null && canvasGroup.alpha <= 0) return false;
-
-            // 4. 检查文本颜色alpha值
-            if (textComponent is Text unityText)
-            {
-                if (unityText.color.a <= 0) return false;
-            }
-            else if (textComponent is TMP_Text tmpText)
-            {
-                if (tmpText.color.a <= 0) return false;
-            }
-
-            // 5. 检查RectTransform的scale（如果scale为0则不可见）
-            if (transform is RectTransform rectTransform)
-            {
-                var scale = rectTransform.localScale;
-                if (scale.x <= 0 || scale.y <= 0) return false;
-            }
-
-            // 6. 检查是否在屏幕范围内（可选，比较消耗性能）
-            // var renderer = gameObject.GetComponent<Renderer>();
-            // if (renderer != null && !renderer.isVisible) return false;
-
-            return true;
+            return showName?.ToString();
         }
+        public static string GetCharacterEmoji(GameObject character, ManualLogSource logger) {
+            var emojiRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/emojiRootPos/emojiRoot/emoji");
+            if (!(emojiRoot?.gameObject.activeInHierarchy ?? false)) return null;
 
-        private static bool NameMatches(string name, string[] hints)
-        {
-            if (string.IsNullOrEmpty(name)) return false;
-            foreach (var h in hints)
-            {
-                if (!string.IsNullOrEmpty(h) && name.IndexOf(h, StringComparison.OrdinalIgnoreCase) >= 0)
-                    return true;
-            }
-            return false;
+                var UIImageAnimator = emojiRoot.GetComponent("UIImageAnimator");
+                var currentAnimation = GetMember(UIImageAnimator, "currentAnimation");
+                var animationName = GetMember(currentAnimation, "animationName")?.ToString();
+                return animationName;
         }
-
-        private static string GetPathStr(Transform tr)
-        {
-            return string.Join("/", GetParents(tr));
-        }
-        private static List<string> GetParents(Transform tr)
-        {
-            var stack = new List<string>(16);
-            var cur = tr;
-            while (cur != null)
-            {
-                stack.Add(cur.name);
-                cur = cur.parent;
-            }
-            stack.Reverse();
-            return stack;
-        }
-
     }
 }

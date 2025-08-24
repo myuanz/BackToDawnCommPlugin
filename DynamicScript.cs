@@ -12,49 +12,72 @@ namespace BackToDawnCommPlugin
     /// <summary>
     /// 动态脚本类 - 用于F11键动态编译和调用
     /// </summary>
+
     public class DynamicScript
     {
         /// <summary>
         /// 执行函数 - 这是动态编译后要调用的主要方法
         /// </summary>
         /// <param name="logger">日志记录器</param>
+        
+        private static readonly System.Text.RegularExpressions.Regex characterNameRegex = new System.Text.RegularExpressions.Regex(@"^\d+_\w+_\w+$");
+
         public static void Execute(ManualLogSource logger)
         {
             logger.LogInfo("=== 动态脚本执行开始 ===");
             logger.LogInfo("当前时间: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
-            var regex = new System.Text.RegularExpressions.Regex(@"^\d+_\w+_\w+$");
-            var characters = new Dictionary<string, GameObject>();
 
             WithTimer(() => {
-                var layer = LayerMask.NameToLayer("Character");
-                var characterLayers = UnityEngine.Object.FindObjectsOfType<GameObject>()
-                        .Where(go => go != null && go.activeInHierarchy && go.layer == layer)
-                        .ToList();
-                foreach (var go in characterLayers)
-                {
-                    if (regex.IsMatch(go.name))
-                    {
-                        characters[go.name] = go;
+                var characterInfos = CollectCharacterInfo(logger);
+
+                foreach (var characterInfo in characterInfos) {
+                    if (characterInfo.Value.WaitingInteraction) {
+                        logger.LogInfo($"\t[{characterInfo.Key}] 等待交互");
+                    } else {
+                        logger.LogInfo($"\t[{characterInfo.Key}] 可继续");
                     }
                 }
-                foreach (var characterkv in characters)
-                {
-                    // logger.LogInfo($"Character: {characterkv.Key}");
-
-                    GetCharacterInteraction(characterkv.Value, logger).ForEach(s => logger.LogInfo($"\t交互 [{characterkv.Key}]: {s}"));
-                    GetCharacterTalk(characterkv.Value, logger).ForEach(s => logger.LogInfo($"\t聊天 [{characterkv.Key}]: {s}"));
-                    var quest = GetCharacterQuest(characterkv.Value, logger);
-                    var emoji = GetCharacterEmoji(characterkv.Value, logger);
-                    if (quest != null) logger.LogInfo($"\tquest [{characterkv.Key}]: {quest}");
-                    if (emoji != null) logger.LogInfo($"\t表情 [{characterkv.Key}]: {emoji}");
-                }
             }, logger);
+        }
+        
+        public static Dictionary<string, CharacterInfo> CollectCharacterInfo(ManualLogSource logger)
+        {
+            // 收集所有角色对象
+            var characters = CollectAllCharacters();
+            var characterInfos = new Dictionary<string, CharacterInfo>();
+            foreach (var characterkv in characters)
+            {
+                var characterInfo = new CharacterInfo{
+                    name = characterkv.Key,
+                    interactions = GetCharacterInteraction(characterkv.Value, logger),
+                    talks = GetCharacterTalk(characterkv.Value, logger),
+                    quest = GetCharacterQuest(characterkv.Value, logger),
+                    emoji = GetCharacterEmoji(characterkv.Value, logger)
+                };
+                if (characterInfo.HasData) {
+                    characterInfos[characterkv.Key] = characterInfo;
+                }
+            }
+            return characterInfos;
+        }
+
+        public static Dictionary<string, GameObject> CollectAllCharacters() {
+            var characters = new Dictionary<string, GameObject>();
+            var layer = LayerMask.NameToLayer("Character");
+            var characterLayers = UnityEngine.Object.FindObjectsOfType<GameObject>()
+                .Where(go => go != null && go.activeInHierarchy && go.layer == layer && characterNameRegex.IsMatch(go.name))
+                .ToList();
+            foreach (var go in characterLayers)
+            {
+                characters[go.name] = go;
+            }
+            return characters;
         }
         public static Transform FindByPath(GameObject character, string path) {
             return character.transform.Find(path);
         }
-        public static List<string> GetComponentText(Transform root) {
+        public static List<string> CollectComponentText(Transform root) {
             var res = new List<string>();
             if (root == null) return res;
             var textListItems = root.GetComponentsInChildren<UnityEngine.UI.Text>().Where(item => item.gameObject.activeInHierarchy).Reverse();
@@ -66,16 +89,16 @@ namespace BackToDawnCommPlugin
         public static List<string> GetCharacterInteraction(GameObject character, ManualLogSource logger)
         {
             var interactionRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)");
-            return GetComponentText(interactionRoot);
+            return CollectComponentText(interactionRoot);
         }
 
         public static List<string> GetCharacterTalk(GameObject character, ManualLogSource logger)
         {
             var talkRoot = FindByPath(character, "Character Canvas/TalkWord_black(Clone)");
-            var text = GetComponentText(talkRoot);
+            var text = CollectComponentText(talkRoot);
             if (text == null || text.Count == 0) {
                 talkRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text");
-                text = GetComponentText(talkRoot);
+                text = CollectComponentText(talkRoot);
             }
             return text;
         }
