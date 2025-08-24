@@ -10,7 +10,7 @@ using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppInterop.Runtime.Runtime;
 using System.Text.RegularExpressions;
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     /// <summary>
     /// 所有可交互内容: 对话框、表情符、问号

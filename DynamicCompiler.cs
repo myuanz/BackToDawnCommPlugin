@@ -6,7 +6,7 @@ using System.Diagnostics;
 using BepInEx.Logging;
 using UnityEngine;
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     /// <summary>
     /// 真正的动态编译器 - 支持运行时编译C#代码

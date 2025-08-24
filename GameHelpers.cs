@@ -3,7 +3,7 @@ using System.Linq;
 using Il2CppSystem.Reflection;
 using UnityEngine;
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     /// <summary>游戏辅助工具类</summary>
     static class InputManageHelper

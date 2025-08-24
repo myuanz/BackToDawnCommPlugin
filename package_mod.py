@@ -24,7 +24,7 @@ VERSION = manifest["version_number"]
 AUTHOR = "myuan"
 DESCRIPTION = manifest["description"]
 WEBSITE_URL = manifest["website_url"]
-DLL_NAME = "BackToDawnCommPlugin.dll"
+DLL_NAME = "FastDialog.dll"
 
 BUILD_DIR = PROJECT_DIR / "bin" / "Release" / "net6.0"
 PACKAGE_DIR = PROJECT_DIR / "package"; PACKAGE_DIR.mkdir(exist_ok=True)

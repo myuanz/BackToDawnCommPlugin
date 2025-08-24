@@ -7,7 +7,7 @@ using Il2CppSystem.Reflection;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppInterop.Runtime.Runtime;                          // Il2Cpp 的 BindingFlags/Type
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     /// <summary>
     /// 动态脚本类 - 用于F11键动态编译和调用

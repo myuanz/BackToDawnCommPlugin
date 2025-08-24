@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using MonoMod.RuntimeDetour;
 using BepInEx.Configuration;
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]

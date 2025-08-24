@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace BackToDawnCommPlugin
+namespace FastDialog
 {
     /// <summary>Windows输入模拟工具类</summary>
     static class WinInput
