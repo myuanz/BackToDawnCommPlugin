@@ -20,9 +20,9 @@
 
 ### 下载
 
-1. 如果你的 Github 足够快, 可以从 https://github.com/myuanz/BackToDawnCommPlugin/releases 下载
-2. 如果你有百度盘会员, 可以从 https://pan.baidu.com/s/1RykwajmrnOtyts2o0N2jYw?pwd=pyht 下载
-3. 如果你能访问 xget, 可以点击 [FastDialog-1.0.1.zip](https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/FastDialog-1.0.1.zip) 和 [BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.738+af0cba7.zip](https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.738+af0cba7.zip) 
+1. 如果你能访问 xget (通常可以), 可以点击 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/FastDialog-1.0.1.zip 和 https://xget.xi-xu.me/gh/myuanz/BackToDawnCommPlugin/releases/download/1.0.1/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.738+af0cba7.zip 
+2. 如果你的 Github 足够快, 可以从 https://github.com/myuanz/BackToDawnCommPlugin/releases 下载
+3. 如果你有百度盘会员, 可以从 https://pan.baidu.com/s/1RykwajmrnOtyts2o0N2jYw?pwd=pyht 下载
 
 下载完成后你应该得到这两个文件 ![alt text](static/all-files.png)
 
