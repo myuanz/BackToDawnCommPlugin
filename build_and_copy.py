@@ -22,7 +22,7 @@ if r.returncode not in [
     exit(1)
 
 r = subprocess.Popen(
-    'dotnet build', stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    'dotnet build --configuration Release', stdout=subprocess.PIPE, stderr=subprocess.PIPE
 )
 print('building...')
 r.wait()
@@ -33,9 +33,11 @@ if r.returncode != 0:
     print(r.stderr.read().decode('utf-8'))
     exit(1)
 
+target_dir = game_path.parent / 'BepInEx' / 'plugins' / 'BackToDawnCommPlugin'
+target_dir.mkdir(parents=True, exist_ok=True)
 shutil.copy(
-    'bin/Debug/net6.0/BackToDawnCommPlugin.dll', 
-    game_path.parent / 'BepInEx' / 'plugins' / 'BackToDawnCommPlugin'
+    'bin/Release/net6.0/BackToDawnCommPlugin.dll', 
+    target_dir
 )
 
 print('build and copy success')
