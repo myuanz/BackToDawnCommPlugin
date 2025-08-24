@@ -28,8 +28,7 @@ namespace BackToDawnCommPlugin
 
             WithTimer(() => {
                 var layer = LayerMask.NameToLayer("Character");
-                var allGameObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-                var characterLayers = allGameObjects
+                var characterLayers = UnityEngine.Object.FindObjectsOfType<GameObject>()
                         .Where(go => go != null && go.activeInHierarchy && go.layer == layer)
                         .ToList();
                 foreach (var go in characterLayers)
@@ -39,58 +38,46 @@ namespace BackToDawnCommPlugin
                         characters[go.name] = go;
                     }
                 }
-            }, logger);
-            logger.LogInfo($"场景中CharacterLayer数量: {characters.Count}");
-
-            WithTimer(() => {
                 foreach (var characterkv in characters)
                 {
                     // logger.LogInfo($"Character: {characterkv.Key}");
-                    GetCharacterInteraction(characterkv.Value, logger);
-                    GetCharacterTalk(characterkv.Value, logger);
-                    GetCharacterQuest(characterkv.Value, logger);
-                    GetCharacterEmoji(characterkv.Value, logger);
+
+                    GetCharacterInteraction(characterkv.Value, logger).ForEach(s => logger.LogInfo($"\t交互 [{characterkv.Key}]: {s}"));
+                    GetCharacterTalk(characterkv.Value, logger).ForEach(s => logger.LogInfo($"\t聊天 [{characterkv.Key}]: {s}"));
+                    var quest = GetCharacterQuest(characterkv.Value, logger);
+                    var emoji = GetCharacterEmoji(characterkv.Value, logger);
+                    if (quest != null) logger.LogInfo($"\tquest [{characterkv.Key}]: {quest}");
+                    if (emoji != null) logger.LogInfo($"\t表情 [{characterkv.Key}]: {emoji}");
                 }
             }, logger);
         }
-
+        public static Transform FindByPath(GameObject character, string path) {
+            return character.transform.Find(path);
+        }
+        public static List<string> GetComponentText(Transform root) {
+            var res = new List<string>();
+            if (root == null) return res;
+            var textListItems = root.GetComponentsInChildren<UnityEngine.UI.Text>().Where(item => item.gameObject.activeInHierarchy).Reverse();
+            foreach (var item in textListItems) {
+                res.Add(item.text);
+            }
+            return res;
+        }
         public static List<string> GetCharacterInteraction(GameObject character, ManualLogSource logger)
         {
-            var res = new List<string>();
-            var interactionRoot = character.transform.Find("Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)");
-            if (interactionRoot != null) {
-                logger.LogInfo($"Root InteractionList: {interactionRoot.name}");
-                
-                var interactionListItems = interactionRoot.GetComponentsInChildren<UnityEngine.UI.Text>().Where(item => item.gameObject.activeInHierarchy).Reverse();
-                foreach (var item in interactionListItems)
-                {
-                    res.Add(item.text);
-                    logger.LogInfo($"\t交互 [{character.name}]: {item.text}");
-                }
-            } else {
-                // logger.LogInfo($"Root InteractionList: not found");
-            }
-
-            return res;
+            var interactionRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/InteractionList(Clone)");
+            return GetComponentText(interactionRoot);
         }
 
         public static List<string> GetCharacterTalk(GameObject character, ManualLogSource logger)
         {
-            var res = new List<string>();
-            var talkRoot = character.transform.Find("Character Canvas/TalkWord_black(Clone)");
-            if (talkRoot != null) {
-                logger.LogInfo($"Root Talk: {talkRoot.name}");
-                
-                var talkListItems = talkRoot.GetComponentsInChildren<UnityEngine.UI.Text>().Where(item => item.gameObject.activeInHierarchy).Reverse();
-                foreach (var item in talkListItems)
-                {
-                    res.Add(item.text);
-                    logger.LogInfo($"\t聊天 [{character.name}]: {item.text}");
-                }
-            } else {
-                // logger.LogInfo($"Root Talk: not found");
+            var talkRoot = FindByPath(character, "Character Canvas/TalkWord_black(Clone)");
+            var text = GetComponentText(talkRoot);
+            if (text == null || text.Count == 0) {
+                talkRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/TalkWord_black(Clone)/new/wordNew/word/Text");
+                text = GetComponentText(talkRoot);
             }
-            return res;
+            return text;
         }
         public static void showAllFields(Component o, ManualLogSource logger) {
             foreach (var f in o.GetIl2CppType()
@@ -99,7 +86,8 @@ namespace BackToDawnCommPlugin
                     logger.LogInfo($"FIELD {f.FieldType.Name} {f.Name} = {f.GetValue(o)}");
                 }
         }
-        public static object GetMember(Component o, string name) {
+        public static Il2CppSystem.Object GetMember(Il2CppSystem.Object o, string name) {
+            if (o == null) return null;
             const BindingFlags BF = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
             var t = o.GetIl2CppType();
             while (t != null) {
@@ -109,10 +97,6 @@ namespace BackToDawnCommPlugin
                 var f = t.GetField(name, BF);
                 if (f != null) return f.GetValue(o);
 
-                // auto-property 的后备字段：<showName>k__BackingField
-                f = t.GetField($"<{name}>k__BackingField", BF);
-                if (f != null) return f.GetValue(o);
-
                 t = t.BaseType;
             }
             return null;
@@ -120,68 +104,35 @@ namespace BackToDawnCommPlugin
 
         public static string GetCharacterQuest(GameObject character, ManualLogSource logger)
         {
-            var questRoot = character.transform.Find("Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/questAnimation");
-            if (questRoot != null && questRoot.gameObject.activeInHierarchy) {
-                logger.LogInfo($"Root Quest: {character.name} {questRoot.name}");
-                // 路径: 11_驴子_山姆/Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/questAnimation
-                // 组件名称: Widget_Animator 
-                // 内容: Widget_Animator.showName = "question"
+            var questRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/questAnimation");
+            if (!(questRoot?.gameObject.activeInHierarchy ?? false)) return null;
+            var widgetAnimator = questRoot?.GetComponent("Widget_Animator");
+            var showName = GetMember(widgetAnimator, "showName");
 
-                var try_c = questRoot.GetComponent("Widget_Animator");
-                if (try_c != null) {
-                    // logger.LogInfo($"\t\tQuest by name: {try_c.gameObject.name} {try_c.GetType().Name}");
-
-                    var t = try_c.GetIl2CppType();
-                    var showNameProperty = t.GetField("showName");
-                    var showName = showNameProperty.GetValue(try_c).ToString();
-
-                    if (showNameProperty != null)
-                    {
-                        logger.LogInfo($"\t\t\tShowName: {showName}");
-                    } else {
-                        logger.LogInfo($"\t\t\tShowName: not found");
-                    }
-                    return showName;
-                } else {
-                    logger.LogInfo($"\t\tQuest by name: not found");
-                }
-            } else {
-                // logger.LogInfo($"Root Quest: not found");
-            }
-            return null;
+            return showName?.ToString();
         }
         public static string GetCharacterEmoji(GameObject character, ManualLogSource logger) {
-            var emojiRoot = character.transform.Find("Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/emojiRootPos/emojiRoot/emoji");
-            if (emojiRoot != null && emojiRoot.gameObject.activeInHierarchy) {
-                logger.LogInfo($"Root Emoji: {character.name} {emojiRoot.name}");
-                // get UIImageAnimator.currentAnimation.animationName
-                var try_c = emojiRoot.GetComponent("UIImageAnimator");
-                // logger.LogInfo($"\t\t\tEmoji by name: {try_c.gameObject.name} {try_c.GetType().Name}");
-                // showAllFields(try_c)
-                if (try_c != null) {
-                    var t = try_c.GetIl2CppType();
-                    // showAllFields(try_c, logger);
-                    var currentAnimationProperty = t.GetField("currentAnimation", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    var currentAnimation = currentAnimationProperty.GetValue(try_c);
-                    var animationName = currentAnimation.GetIl2CppType().GetField("animationName").GetValue(currentAnimation).ToString();
-                    logger.LogInfo($"\t\t\tcurrentAnimation: {animationName}");
-                    return animationName;
-                } else {
-                    logger.LogInfo($"\t\tEmoji by name: not found");
-                }
-            }
-            return null;
+            var emojiRoot = FindByPath(character, "Interaction/Root Interaction Character Canvas/Interaction Character Canvas/OverheadAnimator(Clone)/emojiRootPos/emojiRoot/emoji");
+            if (!(emojiRoot?.gameObject.activeInHierarchy ?? false)) return null;
+
+                var UIImageAnimator = emojiRoot.GetComponent("UIImageAnimator");
+                var currentAnimation = GetMember(UIImageAnimator, "currentAnimation");
+                var animationName = GetMember(currentAnimation, "animationName")?.ToString();
+                return animationName;
         }
 
         public static void WithTimer(Action action, ManualLogSource logger)
         {
             var timer = new System.Diagnostics.Stopwatch();
             timer.Start();
-            action();
+            try {
+                action();
+            } catch (Exception e) {
+                logger.LogError($"执行失败: {e.Message}");
+                logger.LogError($"{e.StackTrace}");
+            }
             timer.Stop();
             logger.LogInfo($"\t\t执行时间: {timer.ElapsedMilliseconds}ms");
         }
     }
-
-
 }
