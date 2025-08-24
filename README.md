@@ -16,7 +16,11 @@
 
 - [ ] 记录对话并在游戏内展示
 
-```
-$env:BTTD_DIR = "C:\Program Files (x86)\Steam\steamapps\common\MetalHeadGames\"
-dotnet build .\BackToDawnCommPlugin.sln
+
+## 从源代码开发
+
+```powershell
+$env:BTTD_DIR = "你的游戏安装目录"
+dotnet build
+python build_and_copy.py # 用于结束游戏、构建dll、复制dll、启动游戏
 ```
