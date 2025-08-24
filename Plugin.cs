@@ -52,6 +52,10 @@ namespace BackToDawnCommPlugin
             // 设置控制台编码为UTF-8（全局设置）
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Plugin.Log.LogInfo("Console encoding set to UTF-8");
+
+            var inputManage = InputManageHelper.FindInputManage();
+            inputManage.SetForceKeyboardMouse();
+            Plugin.Log.LogInfo("InputManage set to force keyboard mouse");
         }
 
         void Update()
